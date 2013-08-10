@@ -1,4 +1,4 @@
-require File.expand_path('../attr_comparable',  __FILE__)
+require File.expand_path('../../lib/attr_comparable',  __FILE__)
 require 'bundler'
 Bundler.require(:default)
 require 'minitest/autorun'
