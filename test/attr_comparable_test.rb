@@ -75,13 +75,6 @@ describe 'AttrComparable' do
     end
   end
 
-  it "should be able to compare with nil" do
-    assert_equal nil, ComparableTestManyParameters.compare_with_nil(nil, nil)
-    assert_equal -1, ComparableTestManyParameters.compare_with_nil(nil, 1)
-    assert_equal  1, ComparableTestOneParameter.compare_with_nil(1, nil)
-    assert_equal  1, ComparableTestOneParameter.compare_with_nil("dog", "cat")
-  end
-
   describe "many parameters with nil" do
     before do                                                  # sort order
       @d1 = ComparableTestManyParameters.new(nil, 'S')          # 1
