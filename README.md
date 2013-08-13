@@ -31,6 +31,11 @@ class FullName
         (middle <=> other.middle).nonzero? ||
           suffix <=> other.suffix
   end
+  
+  def to_s
+    no_suffix = [first.presence, middle.presence, last.presence].compact.join(' ')
+    [no_suffix, suffix.presence].compact.join(', ')
+  end
 end
 ```
 You can see that the `<=>` method isn't very DRY, and as shown it doesn't even work with `nil`.
