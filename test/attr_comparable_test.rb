@@ -97,4 +97,49 @@ describe 'AttrComparable' do
       assert @d2 != @d3
     end
   end
+
+  describe "across classes" do
+    it 'should consider instances of two classes with the same definition and attributes equivalent' do
+      klass1 = Class.new do
+        include AttrComparable
+        attr_accessor :an_attribute
+        attr_compare :an_attribute
+      end
+      klass2 = Class.new do
+        include AttrComparable
+        attr_accessor :an_attribute
+        attr_compare :an_attribute
+      end
+
+      instance1 = klass1.new
+      instance2 = klass2.new
+      assert instance1 == instance2, 'instances should compare as equal when the same attributes are equal across classes'
+
+      tester_obj = Object.new # Equal only by identity
+      instance1.an_attribute = tester_obj
+      instance2.an_attribute = tester_obj
+      assert instance1 == instance2
+    end
+
+    it "Can use the comparable parameter :class to base equivalence on class" do
+      klass1 = Class.new do
+        include AttrComparable
+        attr_accessor :an_attribute
+        attr_compare :class, :an_attribute
+      end
+
+      klass2 = Class.new do
+        include AttrComparable
+        attr_accessor :an_attribute
+        attr_compare :class, :an_attribute
+      end
+
+      instance1a = klass1.new
+      instance1b = klass1.new
+      instance2a = klass2.new
+
+      assert instance1a == instance1b, 'instances of the same class should be equal'
+      assert instance1a != instance2a, 'instances of different class should not be equal'
+    end
+  end
 end
