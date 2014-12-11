@@ -1,7 +1,7 @@
 require File.expand_path('../lib/attr_comparable/version', __FILE__)
 
 Gem::Specification.new do |gem|
-  gem.add_dependency 'minitest' # Included in Ruby 1.9, but we want the latest.
+  gem.add_development_dependency 'minitest' # Included in Ruby 1.9, but we want the latest.
   gem.add_development_dependency 'rake', '>=0.9'
 
   gem.authors       = ["Colin Kelley"]
