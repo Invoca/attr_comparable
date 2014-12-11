@@ -11,19 +11,18 @@ module AttrComparable
   module ClassMethods
     # like <=> but handles nil values
     # returns the code in string form to be eval'd
-    # code will return nil instead of 0 for equal iff return_nil_on_equal is truthy
-    def compare_with_nil_code(left, right, return_nil_on_equal)
+    def compare_with_nil_code(left, right)
       <<-EOS
         if #{ left }.nil?
           if #{ right }.nil?
-            #{ return_nil_on_equal ? 'nil' : '0' }
+            0
           else
             -1
           end
         elsif #{ right }.nil?
           1
         else
-          (#{ left } <=> #{ right })#{ '.nonzero?' if return_nil_on_equal }
+          #{ left } <=> #{ right }
         end
       EOS
     end
@@ -33,13 +32,12 @@ module AttrComparable
 
       remaining_attrs = attributes.size;
       attr_exprs = attributes.map do |attribute|
-        remaining_attrs -= 1
-        compare_with_nil_code("self.#{attribute}", "rhs.#{attribute}", remaining_attrs.nonzero?).strip
+        '(' + compare_with_nil_code("self.#{attribute}", "rhs.#{attribute}").strip + ')'
       end
 
       class_eval <<-EOS
         def <=>(rhs)
-          #{ attr_exprs.join(" || ") }
+          #{ attr_exprs.join(".nonzero? || ") }
         end
       EOS
     end
