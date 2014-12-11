@@ -27,11 +27,8 @@ module AttrComparable
       EOS
     end
 
-    def attr_compare(*attributes_arg)
-      attributes = attributes_arg.flatten
-
-      remaining_attrs = attributes.size;
-      attr_exprs = attributes.map do |attribute|
+    def attr_compare(*attributes)
+      attr_exprs = (attributes.flatten).map do |attribute|
         '(' + compare_with_nil_code("self.#{attribute}", "rhs.#{attribute}").strip + ')'
       end
 
