@@ -75,6 +75,6 @@ Example Usage
 >> junior = FullName.new("John", "Q.", "Public", "Jr.")
 >> junior > dad
 => true
->> [mom, dad, junior].sort.map &:to_s
+>> [junior, mom, dad].sort.map &:to_s
 => ["Kathy Doe", "John Q. Public", "John Q. Public, Jr."]
 ```
