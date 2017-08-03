@@ -97,4 +97,39 @@ describe 'AttrComparable' do
       assert @d2 != @d3
     end
   end
+
+  describe "parameters that are incompatible to order" do
+    before do
+      @d1 = ComparableTestOneParameter.new(false)
+      @d2 = ComparableTestOneParameter.new(true)
+      @d3 = ComparableTestManyParameters.new(false, 'D')
+      @d4 = ComparableTestManyParameters.new(true, 'D')
+      @d5 = ComparableTestManyParameters.new('Kelly', false)
+      @d6 = ComparableTestManyParameters.new('Kelly', true)
+    end
+
+    # Objects with attributes that can't be compared should return nil
+
+    it "should return nil when the objects contain incompatible attributes" do
+      assert_nil @d1 <=> @d2
+      assert_nil @d3 <=> @d4
+      assert_nil @d5 <=> @d6
+    end
+
+    # For ComparableTestManyParameters the objects are compared by last_name then first_name
+    # If the comparison of last_names returns nil, that should immediately return nil,
+    # and not compare the remaining attributes. This code tests that by raising a runtime error
+    # if the first_name attribute (later in the compare order) is acessed
+
+    it "should return immediately return nils, not evaulate further attributes" do
+      d7 = Minitest::Mock.new
+      d8 = Minitest::Mock.new
+      4.times { d7.expect :last_name, false, [] } # :last_name is used exactly twice per <=> call
+
+      assert_nil @d5 <=> d7
+      assert_nil @d4 <=> d7
+
+      d7.verify
+    end
+  end
 end

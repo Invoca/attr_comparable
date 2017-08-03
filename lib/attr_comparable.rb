@@ -3,49 +3,40 @@
 #
 # Use attr_comparabie <attribute list>
 # to declare the attributes which should be compared, and the order they should be
-# Attributes may be nil; nil attributes sort earlier than non-nil to match the SQL convention
+# Attributes may be nil; nil attributes sort earlier than non-nil to match SQL NULL ordering
 #
 module AttrComparable
   include Comparable
 
   module ClassMethods
     # like <=> but handles nil values
-    # when equal, returns nil rather than 0 so the caller can || together
-    def compare_with_nil(left, right)
-      if left.nil?
-        if right.nil?
-          nil
+    # returns the code in string form to be eval'd
+    def compare_with_nil_code(left, right)
+      <<-EOS
+        if #{ left }.nil?
+          if #{ right }.nil?
+            0
+          else
+            -1
+          end
+        elsif #{ right }.nil?
+          1
         else
-          -1
+          cmp_result = (#{ left } <=> #{ right })
+          return nil if cmp_result.nil?
+          cmp_result
         end
-      elsif right.nil?
-        1
-      else
-        cmp_result = (safe_compare(left) <=> safe_compare(right))
-        return nil if cmp_result.nil?
-        cmp_result.nonzero?
-      end
-    end
-
-    def safe_compare(value)
-      case value
-        when TrueClass
-          [1, 1]
-        when FalseClass
-          [1, 0]
-        else
-          [0, value]
-      end
+      EOS
     end
 
     def attr_compare(*attributes)
-      attributes = attributes.flatten
+      attr_exprs = (attributes.flatten).map do |attribute|
+        '(' + compare_with_nil_code("self.#{attribute}", "rhs.#{attribute}").strip + ')'
+      end
+
       class_eval <<-EOS
         def <=>(rhs)
-          #{attributes.map do |attribute|
-              "self.class.compare_with_nil(self.#{attribute}, rhs.#{attribute})"
-            end.join(" || ")
-           } || 0
+          #{ attr_exprs.join(".nonzero? || ") }
         end
       EOS
     end
