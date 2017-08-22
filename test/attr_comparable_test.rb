@@ -125,11 +125,13 @@ describe 'AttrComparable' do
       d7 = Minitest::Mock.new
       d8 = Minitest::Mock.new
       4.times { d7.expect :last_name, false, [] } # :last_name is used exactly twice per <=> call
+      2.times { d7.expect :nil?, false, [] } # :nil? is used exactly once per <=> call
 
       assert_nil @d5 <=> d7
       assert_nil @d4 <=> d7
 
       d7.verify
+      d8.verify
     end
   end
 end

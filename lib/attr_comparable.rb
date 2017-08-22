@@ -36,6 +36,8 @@ module AttrComparable
 
       class_eval <<-EOS
         def <=>(rhs)
+          return nil if rhs.nil?
+          
           #{ attr_exprs.join(".nonzero? || ") }
         end
       EOS
