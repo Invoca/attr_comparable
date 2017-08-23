@@ -124,14 +124,23 @@ describe 'AttrComparable' do
     it "should return immediately return nils, not evaulate further attributes" do
       d7 = Minitest::Mock.new
       d8 = Minitest::Mock.new
-      4.times { d7.expect :last_name, false, [] } # :last_name is used exactly twice per <=> call
-      2.times { d7.expect :nil?, false, [] } # :nil? is used exactly once per <=> call
 
+      2.times { d7.expect :last_name, false, [] } # :last_name is used exactly twice per <=> call
+      d7.expect :nil?, false, [] # :nil? is used exactly once per <=> call
       assert_nil @d5 <=> d7
-      assert_nil @d4 <=> d7
+
+      2.times { d8.expect :last_name, true, [] }
+      2.times { d8.expect :first_name, 'D', [] }
+      d8.expect :nil?, false, []
+      assert_equal 0, @d4 <=> d8
 
       d7.verify
       d8.verify
+    end
+
+    it "should return nil if the rhs is nil" do
+      assert_nil @d1 <=> nil
+      assert_nil @d3 <=> nil
     end
   end
 end

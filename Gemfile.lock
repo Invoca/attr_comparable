@@ -16,3 +16,6 @@ DEPENDENCIES
   attr_comparable!
   minitest
   rake (>= 0.9)
+
+BUNDLED WITH
+   1.12.5
