@@ -22,8 +22,9 @@ module AttrComparable
         elsif #{ right }.nil?
           1
         else
-          cmp_result = (#{ left } <=> #{ right })
-          return nil if cmp_result.nil?
+          if (cmp_result = (#{ left } <=> #{ right })).nil?
+            return nil
+          end
           cmp_result
         end
       EOS
@@ -36,9 +37,9 @@ module AttrComparable
 
       class_eval <<-EOS
         def <=>(rhs)
-          return nil if rhs.nil?
-          
-          #{ attr_exprs.join(".nonzero? || ") }
+          unless rhs.nil?
+            #{ attr_exprs.join(".nonzero? || ") }
+          end
         end
       EOS
     end
