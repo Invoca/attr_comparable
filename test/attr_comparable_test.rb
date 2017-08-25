@@ -97,4 +97,52 @@ describe 'AttrComparable' do
       assert @d2 != @d3
     end
   end
+
+  describe "parameters that are incompatible to order" do
+    it "should return nil when the objects contain incompatible attributes" do
+      d1 = ComparableTestOneParameter.new(false)
+      d2 = ComparableTestOneParameter.new(true)
+      d3 = ComparableTestManyParameters.new(false, 'D')
+      d4 = ComparableTestManyParameters.new(true, 'D')
+      d5 = ComparableTestManyParameters.new('Kelly', false)
+      d6 = ComparableTestManyParameters.new('Kelly', true)
+
+      assert_nil d1 <=> d2
+      assert_nil d3 <=> d4
+      assert_nil d5 <=> d6
+    end
+
+    # For ComparableTestManyParameters the objects are compared by last_name then first_name
+    # If the comparison of last_names returns nil, that should immediately return nil,
+    # and not compare the remaining attributes. This code tests that by raising a runtime error
+    # if the first_name attribute (later in the compare order) is acessed
+
+    it "should return immediately return nils, not evaulate further attributes" do
+      incompatible_first_attribute = ComparableTestManyParameters.new('Kelly', false)
+      compatible_first_and_second_attribute = ComparableTestManyParameters.new(true, 'D')
+
+      d7 = Minitest::Mock.new
+      d8 = Minitest::Mock.new
+
+      2.times { d7.expect :last_name, false, [] } # :last_name is used exactly twice per <=> call
+      d7.expect :nil?, false, [] # :nil? is used exactly once per <=> call
+      assert_nil incompatible_first_attribute <=> d7
+
+      2.times { d8.expect :last_name, true, [] }
+      2.times { d8.expect :first_name, 'D', [] }
+      d8.expect :nil?, false, []
+      assert_equal 0, compatible_first_and_second_attribute <=> d8
+
+      d7.verify
+      d8.verify
+    end
+
+    it "should return nil if the rhs is nil" do
+      d1 = ComparableTestOneParameter.new(false)
+      d2 = ComparableTestManyParameters.new('Kelly', false)
+
+      assert_nil d1 <=> nil
+      assert_nil d2 <=> nil
+    end
+  end
 end
