@@ -1,4 +1,4 @@
-# ruby '1.8.7'
+# ruby '2.4.2'
 
 source 'https://rubygems.org'
 
