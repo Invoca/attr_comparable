@@ -1,8 +1,5 @@
+require_relative './test_helper'
 require File.expand_path('../../lib/attr_comparable',  __FILE__)
-require 'bundler'
-Bundler.require(:default)
-require 'minitest/autorun'
-
 
 class ComparableTestOneParameter
   include AttrComparable
