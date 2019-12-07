@@ -1,9 +1,8 @@
 #!/usr/bin/env rake
-require "bundler/gem_tasks"
+require 'rake/testtask'
 
 task :default => :test
 
-desc "Run unit tests."
-task :test do
-  ruby "test/attr_comparable_test.rb"
+Rake::TestTask.new do |t|
+  t.pattern = "test/**/*_test.rb"
 end
