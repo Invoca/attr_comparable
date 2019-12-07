@@ -6,6 +6,7 @@ source 'https://rubygems.org'
 gemspec
 
 group :development do
-  gem 'minitest' # Included in Ruby 1.9, but we want the latest.
+  gem 'minitest'
+  gem 'minitest-reporters'
   gem 'rake',    '>=0.9'
 end

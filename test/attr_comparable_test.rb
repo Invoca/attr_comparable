@@ -2,7 +2,11 @@ require File.expand_path('../../lib/attr_comparable',  __FILE__)
 require 'bundler'
 Bundler.require(:default)
 require 'minitest/autorun'
-
+require "minitest/reporters"
+Minitest::Reporters.use! [
+  Minitest::Reporters::ProgressReporter.new,
+  Minitest::Reporters::JUnitReporter.new('test/reports', false)
+]
 
 class ComparableTestOneParameter
   include AttrComparable
