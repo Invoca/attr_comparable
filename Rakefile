@@ -1,4 +1,5 @@
 #!/usr/bin/env rake
+
 require 'rake/testtask'
 
 task :default => :test
