@@ -24,7 +24,7 @@ DEPENDENCIES
   attr_comparable!
   minitest
   minitest-reporters
-  rake (>= 0.9)
+  rake
 
 BUNDLED WITH
    1.17.2
