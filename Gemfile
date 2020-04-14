@@ -8,5 +8,5 @@ gemspec
 group :development do
   gem 'minitest'
   gem 'minitest-reporters'
-  gem 'rake',    '>=0.9'
+  gem 'rake'
 end
