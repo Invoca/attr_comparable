@@ -1,4 +1,4 @@
-# ruby '2.4.2'
+# frozen_string_literal: true
 
 source 'https://rubygems.org'
 
@@ -6,6 +6,7 @@ source 'https://rubygems.org'
 gemspec
 
 group :development do
+  gem 'appraisal'
   gem 'minitest'
   gem 'minitest-reporters'
   gem 'rake'
