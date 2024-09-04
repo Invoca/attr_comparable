@@ -8,14 +8,14 @@ jobs:
   ruby-versions:
     runs-on: ubuntu-latest
     outputs:
-      versions: ${{ steps.versions.outputs.value }}
+      versions: ${{ steps.versions.outputs.versions }}
     steps:
     - id: versions
       name: Fetch Ruby versions
       run: |
         versions="$(curl -s 'https://cache.ruby-lang.org/pub/misc/ci_versions/cruby.json' | jq -c '. - ["head"]')"
         echo "Fetched Ruby versions: ${versions}"
-        echo "::set-output name=value::${versions}"
+        echo "versions=${versions}" >> "$GITHUB_OUTPUT"
 
   tests:
     name: Unit Tests
