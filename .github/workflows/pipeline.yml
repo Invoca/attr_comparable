@@ -8,14 +8,10 @@ jobs:
   ruby-versions:
     runs-on: ubuntu-latest
     outputs:
-      versions: ${{ steps.versions.outputs.versions }}
+      versions: ${{ steps.versions.outputs.supported_versions }}
     steps:
     - id: versions
-      name: Fetch Ruby versions
-      run: |
-        versions="$(curl -s 'https://cache.ruby-lang.org/pub/misc/ci_versions/cruby.json' | jq -c '. - ["head"]')"
-        echo "Fetched Ruby versions: ${versions}"
-        echo "versions=${versions}" >> "$GITHUB_OUTPUT"
+      uses: Invoca/supported_ruby_versions_action@main
 
   tests:
     name: Unit Tests
