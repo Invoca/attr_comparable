@@ -2,3 +2,4 @@
 pkg
 
 test/reports/*
+gemfiles/*.lock
