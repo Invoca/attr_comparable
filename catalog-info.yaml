@@ -19,6 +19,7 @@ metadata:
   tags:
   - ruby
   - gem
+  - public
   annotations:
     buildkite.com/project-slug: invoca/attr-comparable
     github.com/project-slug: invoca/attr_comparable
