@@ -9,5 +9,6 @@ group :development do
   gem 'appraisal'
   gem 'minitest'
   gem 'minitest-reporters'
+  gem 'mutex_m'
   gem 'rake'
 end
